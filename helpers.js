@@ -25,10 +25,16 @@ function randInt(a, b) {
 }
 
 // Collections
+function reduce(array, f, acc) {
+  if (array.length === 0) {
+    return acc;
+  }
+  return reduce(rest(array), f, f(acc, first(array)));
+}
 
 function filter(array, predicate) {
-  return reduce(array, function(acc, x, i) {
-    if (predicate(x, i)) {
+  return reduce(array, function(acc, x) {
+    if (predicate(x)) {
       return conj(acc, x);
     }
     return acc;
@@ -36,17 +42,9 @@ function filter(array, predicate) {
 }
 
 function map(array, f) {
-  return reduce(array, function(acc, x, i) {
-    return conj(acc, f(x, i));
+  return reduce(array, function(acc, x) {
+    return conj(acc, f(x));
   }, []);
-}
-
-function reduce(array, f, start) {
-  var acc = start;
-  each(array, function(element, i) {
-    acc = f(acc, element, i);
-  });
-  return acc;
 }
 
 function each(array, f) {
